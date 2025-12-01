@@ -1,9 +1,3 @@
-Com certeza\! Já que você optou por rodar direto pelo código fonte (o que é ótimo para desenvolvimento e aprendizado), o README deve focar em como configurar o ambiente Python e rodar o script.
-
-Aqui está o novo `README.md` limpo e atualizado para o seu repositório:
-
------
-
 # Paladin vs Dracula - Final Battle ⚔️🧛‍♂️
 
 Um jogo de aventura e ação estilo *top-down* desenvolvido em Python usando a biblioteca **Pygame Zero**. Enfrente hordas de vampiros, desvie de obstáculos e derrote o Conde Drácula\!
