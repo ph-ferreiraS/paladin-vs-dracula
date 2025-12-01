@@ -1,108 +1,102 @@
-# Manual de Compilação: Paladin vs Dracula
+Com certeza\! Já que você optou por rodar direto pelo código fonte (o que é ótimo para desenvolvimento e aprendizado), o README deve focar em como configurar o ambiente Python e rodar o script.
 
-Este guia explica como transformar o código fonte Python (`game.py`) em um executável Windows (`.exe`) independente, que pode ser jogado em computadores sem Python instalado.
-
-## Pré-requisitos
-
-1.  **Python 3.11** instalado e adicionado ao PATH.
-2.  Ambiente virtual (`venv`) ativado no terminal.
-3.  Biblioteca **PyInstaller** instalada:
-    ```powershell
-    pip install pyinstaller
-    ```
+Aqui está o novo `README.md` limpo e atualizado para o seu repositório:
 
 -----
 
-## Passo 1: Preparar o Arquivo de Lançamento
+# Paladin vs Dracula - Final Battle ⚔️🧛‍♂️
 
-O Pygame Zero não pode ser compilado diretamente. É necessário criar um pequeno script "lançador" para inicializar o motor corretamente dentro do executável.
+Um jogo de aventura e ação estilo *top-down* desenvolvido em Python usando a biblioteca **Pygame Zero**. Enfrente hordas de vampiros, desvie de obstáculos e derrote o Conde Drácula\!
 
-1.  Crie um arquivo chamado **`run_game.py`** na mesma pasta do `game.py`.
-2.  Cole o seguinte código nele:
+## 📋 Pré-requisitos
+
+Para rodar este jogo, você precisa ter instalado no seu computador:
+
+  * **Python 3.11** (ou superior).
+  * **Git** (para clonar o repositório).
+
+## 🚀 Instalação e Configuração
+
+Siga os passos abaixo para configurar o ambiente e rodar o jogo:
+
+### 1\. Clonar o Repositório
+
+Abra o terminal e clone os arquivos do projeto:
+
+```bash
+git clone https://github.com/SEU_USUARIO/paladin-vs-dracula.git
+cd paladin-vs-dracula
+```
+
+### 2\. Criar e Ativar o Ambiente Virtual
+
+É recomendado usar um ambiente virtual (`venv`) para não misturar as bibliotecas do jogo com as do seu sistema.
+
+**No Windows (PowerShell):**
+
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate
+```
+
+**No Linux/Mac:**
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 3\. Instalar Dependências
+
+Com o ambiente virtual ativado, instale a biblioteca **Pygame Zero**:
+
+```powershell
+pip install pgzero
+```
+
+*(Ou, se houver um arquivo requirements.txt: `pip install -r requirements.txt`)*
+
+-----
+
+## 🎮 Como Jogar
+
+1.  Certifique-se de que o ambiente virtual (`venv`) está ativado.
+2.  Execute o comando abaixo para iniciar o jogo:
 
 <!-- end list -->
 
-```python
-import os
-import sys
-import pgzero.runner
-import game  # Importa o seu arquivo game.py
-
-# Garante que o diretório de trabalho é onde o executável está
-if getattr(sys, 'frozen', False):
-    os.chdir(os.path.dirname(sys.executable))
-
-# Inicia o jogo manualmente passando o módulo 'game'
-pgzero.runner.PGZeroGame(game).run()
-```
-
-3.  **IMPORTANTE:** Abra o seu arquivo **`game.py`** e **remova** (ou comente) a última linha:
-
-    ```python
-    # pgzrun.go()  <-- COMENTE ESTA LINHA NO GAME.PY
-    ```
-
-4.  Ainda no **`game.py`**, adicione esta importação manual no topo (linha 5) para garantir que o executável encontre os controles:
-
-    ```python
-    from pgzero.builtins import keyboard, screen, music, sounds, images, Actor, clock
-    ```
-
------
-
-## Passo 2: Compilar o Jogo
-
-Abra o terminal na pasta do projeto e execute o comando abaixo (tudo em uma linha só):
-
 ```powershell
-pyinstaller --noconfirm --onedir --windowed --name "PaladinVsDracula" --collect-all pgzero --add-data "images;images" --add-data "music;music" --add-data "sounds;sounds" run_game.py
+python -X utf8 game.py
 ```
 
-**Explicação dos parâmetros:**
+*(Nota: O `-X utf8` garante que caracteres especiais e acentos não causem erros no Windows).*
 
-  * `--onedir`: Cria uma pasta com os arquivos (mais fácil de debugar).
-  * `--windowed`: Oculta a tela preta do terminal ao abrir o jogo.
-  * `--collect-all pgzero`: Copia os arquivos internos essenciais do Pygame Zero.
-  * `--add-data`: Copia suas pastas de mídia automaticamente.
+### Controles
+
+| Tecla / Ação | Função |
+| :--- | :--- |
+| **Setas Direcionais** | Mover o Herói |
+| **Barra de Espaço** | Atacar |
+| **ESC** | Pausar o Jogo |
+| **Mouse (Clique)** | Interagir com os botões do Menu |
 
 -----
 
-## Passo 3: Organização Final (Crucial)
+## 📂 Estrutura do Projeto
 
-Após a compilação terminar:
-
-1.  Vá até a nova pasta **`dist/PaladinVsDracula`**.
-2.  Verifique se as pastas **`images`**, **`music`** e **`sounds`** estão presentes **ao lado** do arquivo `PaladinVsDracula.exe`.
-3.  **Se não estiverem:** Copie-as manualmente da sua pasta de projeto original e cole dentro de `dist/PaladinVsDracula`.
-
-A estrutura final da pasta deve ser:
-
-```text
-PaladinVsDracula/
-├── _internal/
-├── images/       <-- (Copie se faltar)
-├── music/        <-- (Copie se faltar)
-├── sounds/       <-- (Copie se faltar)
-└── PaladinVsDracula.exe
-```
-
-## Passo 4: Jogar
-
-Basta clicar duas vezes em **`PaladinVsDracula.exe`** para iniciar o jogo\!
+  * **`game.py`**: Código fonte principal do jogo.
+  * **`images/`**: Contém todos os sprites (Herói, Drácula, Vampiros e Cenário).
+  * **`music/`**: Trilhas sonoras (Menu, Jogo e Boss).
+  * **`sounds/`**: Efeitos sonoros (Click, Ataque).
 
 -----
 
-### Solução de Problemas Comuns
+## 🛠️ Tecnologias Utilizadas
 
-  * **O jogo fecha instantaneamente:**
+  * **Linguagem:** Python
+  * **Engine:** Pygame Zero (pgzero)
+  * **Bibliotecas:** `math`, `random`, `pygame.Rect`
 
-      * Verifique se as pastas de mídia (`images`, `sounds`) estão ao lado do `.exe`.
-      * Tente compilar sem `--windowed` (use `--console`) para ver a mensagem de erro.
+-----
 
-  * **Erro `NameError: name 'keyboard' is not defined`:**
-
-      * Você esqueceu de adicionar a linha `from pgzero.builtins...` no topo do `game.py`.
-
-  * **Música não toca:**
-
-      * Verifique se os arquivos `.ogg` estão na pasta `music` e se os nomes batem com o código (`menu.ogg`, `game.ogg`).
+**Desenvolvido por Pedro** 🛡️
